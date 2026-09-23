@@ -22,15 +22,15 @@
 
   const products = [
     // Imagen 1 · All day, OKI
-    { id:'mozzarella-toast', name:'Mozzarella toast', category:'Toasts', price:27000, image:img.food, description:'Jamón serrano, mozzarella de búfala, aguacate, cebollas encurtidas y miel.', modifiers:[toastExtra], featured:true },
-    { id:'morning-toast', name:'Morning toast', category:'Toasts', price:25000, image:img.food, description:'Huevo cremoso, queso fresco, tocino crunchy, aguacate y dip de queso crema.', modifiers:[toastExtra], featured:true },
-    { id:'green-toast', name:'Green toast', category:'Toasts', price:23000, image:img.food, description:'Mozzarella, tomates cherry confitados, rúgula, crema de aguacate y pesto fresco.', modifiers:[toastExtra], featured:true, badge:'OKI pick' },
-    { id:'roast-sando', name:'Roast sando', category:'Sandos', price:28000, image:img.food, description:'Roast beef, jamón Blue York, mix de quesos, cebolla y salsa mayo.', featured:true },
+    { id:'mozzarella-toast', name:'Mozzarella toast', category:'Toasts', price:27000, image:'./images/mozzarella-toast.png', description:'Jamón serrano, mozzarella de búfala, aguacate, cebollas encurtidas y miel.', modifiers:[toastExtra], featured:true },
+    { id:'morning-toast', name:'Morning toast', category:'Toasts', price:25000, image:'./images/morning-toast.png', description:'Huevo cremoso, queso fresco, tocino crunchy, aguacate y dip de queso crema.', modifiers:[toastExtra], featured:true },
+    { id:'green-toast', name:'Green toast', category:'Toasts', price:23000, image:'./images/green-toast-menu.png', description:'Mozzarella, tomates cherry confitados, rúgula, crema de aguacate y pesto fresco.', modifiers:[toastExtra], featured:true, badge:'OKI pick' },
+    { id:'roast-sando', name:'Roast sando', category:'Sandos', price:28000, image:'./images/roast-sando.png', description:'Roast beef, jamón Blue York, mix de quesos, cebolla y salsa mayo.', featured:true },
     { id:'chicken-sando', name:'Chicken sando', category:'Sandos', price:25000, image:img.food, description:'Pollo desmechado, tocino, crema de aguacate, vegetales frescos y queso mozzarella.' },
     { id:'tuna-sando', name:'Tuna sando', category:'Sandos', price:25000, image:img.food, description:'Atún cremoso, aguacate y cebollas encurtidas sobre una cama de pesto fresco.' },
     { id:'eggs-your-way', name:'Huevos al gusto', category:'Huevos', price:20000, image:img.food, description:'Acompañados con pan, tocino y aguacate.', modifiers:[eggStyle] },
     { id:'omelette', name:'Omelette', category:'Huevos', price:25000, image:img.food, description:'Huevos, queso crema, mozzarella, aguacate, jamón serrano y rúgula. Acompañado de pan tostado.' },
-    { id:'french-toast', name:'Tostada francesa', category:'Sweet', price:20000, image:img.food, description:'Pan brioche tostado tipo churro, mermelada de arándanos, fresas y helado.', modifiers:[sweetExtra], featured:true },
+    { id:'french-toast', name:'Tostada francesa', category:'Sweet', price:20000, image:'./images/french-toast.png', description:'Pan brioche tostado tipo churro, mermelada de arándanos, fresas y helado.', modifiers:[sweetExtra], featured:true },
     { id:'banana-caramel', name:'Banana Caramel', category:'Sweet', price:null, image:img.food, description:'Pan brioche tostado tipo churro, salsa de caramelo toffee, banano, nueces y helado.', priceLabel:'Precio por confirmar' },
     { id:'pancakes', name:'Pancakes', category:'Sweet', price:13000, image:img.food, description:'Mini pancakes, 10 unidades. Incluye una salsa a elección.', modifiers:[pancakeSauce, sweetExtra] },
     { id:'veranito', name:'Veranito', category:'Drinks', price:20000, image:img.drink, description:'Vino tinto, soda de limón y zumos frescos.' },
@@ -39,7 +39,7 @@
     { id:'soda-red-berries', name:'Soda Frutos rojos', category:'Drinks', price:13000, image:img.drink, description:'Soda, puré de fresa, limón y toppings de fresa.', modifiers:[topping] },
 
     // Imagen 2 · Bowls & smoothies
-    { id:'oki-bowl', name:'OKI bowl', category:'Bowls', price:26000, image:img.bowl, description:'Blend de matcha, aguacate, banano, miel y yogurt griego. Top de granola, coco, chía, banano, fresa y almendras.', modifiers:[bowlExtra], featured:true, badge:'Favorito' },
+    { id:'oki-bowl', name:'OKI bowl', category:'Bowls', price:26000, image:'./images/oki-bowl.png', description:'Blend de matcha, aguacate, banano, miel y yogurt griego. Top de granola, coco, chía, banano, fresa y almendras.', modifiers:[bowlExtra], featured:true, badge:'Favorito' },
     { id:'acai-bowl', name:'Acai berries bowl', category:'Bowls', price:25000, image:img.bowl, description:'Blend de açaí, banano y berries. Top de granola, coco, chía, banano, fresa y crema de maní.', modifiers:[bowlExtra], featured:true },
     { id:'mango-bowl', name:'Mango bowl', category:'Bowls', price:25000, image:img.bowl, description:'Blend de mango, maracuyá, yogurt griego y miel. Top de granola, coco, chía, fresa, banano y arándanos.', modifiers:[bowlExtra] },
     { id:'yogurt-bowl', name:'Yogurt bowl', category:'Bowls', price:26000, image:img.bowl, description:'Blend de yogurt griego. Top de granola, coco, chía, 2 frutas y 1 salsa a elección.', modifiers:[yogurtFruit, yogurtSauce, bowlExtra] },
@@ -89,13 +89,64 @@
     { id:'iced-taro', name:'Iced Taro', category:'Taro', price:15000, image:img.drink, description:'Taro con leche fría.', modifiers:[milk, topping, foam] },
     { id:'dirty-taro', name:'Dirty Taro', category:'Taro', price:18000, image:img.drink, description:'Taro, leche fría y espresso.', modifiers:[milk, topping, foam] },
     { id:'taro-matcha', name:'Taro Matcha', category:'Taro', price:18000, image:img.drink, description:'Taro, leche fría y matcha.', modifiers:[milk, topping, foam] },
-    { id:'matcha-yuzu', name:'Matcha Yuzu', category:'Refreshers', price:15000, image:img.drink, description:'Té verde japonés, zumo de limón y miel.', modifiers:[topping], featured:true },
+    { id:'matcha-yuzu', name:'Matcha Yuzu', category:'Refreshers', price:15000, image:'./images/matcha-yuzu.png', description:'Té verde japonés, zumo de limón y miel.', modifiers:[topping], featured:true },
     { id:'berries-tea', name:'Berries Tea', category:'Refreshers', price:13000, image:img.drink, description:'Té negro, frutos rojos y zumo de limón.', modifiers:[topping] },
     { id:'mango-tea', name:'Mango tea', category:'Refreshers', price:13000, image:img.drink, description:'Té verde, mango puré y limón.', modifiers:[topping] },
     { id:'peach-tea', name:'Peach tea', category:'Refreshers', price:13000, image:img.drink, description:'Té verde, durazno y zumo de limón.', modifiers:[topping] },
   ];
 
   const categories = ['Para ti','Toasts','Sandos','Huevos','Sweet','Drinks','Bowls','Smoothies','Bebidas','Matcha','Café','Calientes','Bakery','Milk Tea','Chai','Taro','Refreshers'];
+  const assignedProductImages = {
+    'banana-caramel':'./images/banana-caramel.png',
+    pancakes:'./images/pancakes.png',
+    veranito:'./images/veranito.png',
+    'verano-rosa':'./images/verano-rosa.png',
+    'soda-mango-passion':'./images/soda-mango-passion.png',
+    'soda-red-berries':'./images/soda-frutos-rojos.png',
+    'mango-bowl':'./images/mango-bowl.png',
+    'yogurt-bowl':'./images/yogurt-bowl.png',
+    'hatsu-soda':'./images/soda-hatsu.png',
+    bretana:'./images/bretana.png',
+    water:'./images/agua-botella.png',
+    'hatsu-tea':'./images/te-hatsu.png',
+    'matcha-mango':'./images/matcha-mango.png',
+    'dirty-matcha':'./images/dirty-matcha.png',
+    'matcha-fresa':'./images/matcha-fresa.png',
+    'matcha-tiramisu':'./images/matcha-tiramisu.png',
+    'coco-matcha':'./images/coco-matcha.png',
+    'matcha-tonic':'./images/matcha-tonic.png',
+    'iced-latte':'./images/iced-latte.png',
+    'caramel-latte':'./images/caramel-latte.png',
+    'tiramisu-latte':'./images/tiramisu-latte.png',
+    'pistachio-latte':'./images/pistachio-latte.png',
+    'coffee-granizado':'./images/granizado-cafe.png',
+    'yuzu-coffee':'./images/yuzu-coffee.png',
+    'orange-coffee':'./images/orange-coffee.png',
+    'ceremonial-matcha':'./images/matcha-ceremonial.png',
+    'hot-matcha-latte':'./images/matcha-latte-caliente.png',
+    'masala-chai':'./images/masala-chai.png',
+    'hot-taro-latte':'./images/taro-latte-caliente.png',
+    espresso:'./images/espresso.png',
+    americano:'./images/americano.png',
+    cappuccino:'./images/capuccino.png',
+    'hot-latte':'./images/latte-caliente.png',
+    cookies:'./images/galletas.png',
+    brownie:'./images/brownie.png',
+    'banana-bread':'./images/banana-bread.png',
+    'oki-milk-tea':'./images/oki-milk-tea.png',
+    'brown-sugar':'./images/brown-sugar.png',
+    'matcha-brown-sugar':'./images/matcha-brown-sugar.png',
+    'chai-latte':'./images/chai-latte.png',
+    'dirty-chai':'./images/dirty-chai.png',
+    'matcha-chai':'./images/matcha-chai.png',
+    'iced-taro':'./images/iced-taro.png',
+    'dirty-taro':'./images/dirty-taro.png',
+    'taro-matcha':'./images/taro-matcha.png',
+    'berries-tea':'./images/berries-tea.png',
+    'mango-tea':'./images/mango-tea.png',
+    'peach-tea':'./images/peach-tea.png',
+  };
+  products.forEach(product=>{if(assignedProductImages[product.id])product.image=assignedProductImages[product.id];});
   const state = { category:'Para ti', query:'', active:null, selections:{}, quantity:1, editingKey:null, cart:[], cartStep:'cart', fulfillment:'pickup', payment:'Transferencia', customer:{name:'',phone:'',address:'',neighborhood:'',notes:''}, orderTotal:0 };
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -113,7 +164,9 @@
   function productById(id){ return products.find(product=>product.id===id); }
 
   function renderCategories(){
-    $('#categories').innerHTML=categories.map(name=>`<button role="tab" aria-selected="${state.category===name}" data-category="${name}">${name}</button>`).join('');
+    const root=$('#categories');
+    root.innerHTML=categories.map(name=>`<button role="tab" aria-selected="${state.category===name}" data-category="${name}">${name}</button>`).join('');
+    requestAnimationFrame(()=>root.querySelector('[aria-selected="true"]')?.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}));
   }
   function visibleProducts(){
     const query=state.query.trim().toLowerCase();
@@ -175,22 +228,35 @@
       root.innerHTML=`<form class="checkout" id="checkout-form"><fieldset class="checkout-choice"><legend>¿Cómo quieres recibir tu pedido?</legend><div class="choice-grid"><label><input type="radio" name="fulfillment" value="pickup" ${state.fulfillment==='pickup'?'checked':''}/><span><b>⌂</b><strong>Recoger</strong><small>En OKI</small></span></label><label><input type="radio" name="fulfillment" value="delivery" ${state.fulfillment==='delivery'?'checked':''}/><span><b>⌖</b><strong>Domicilio</strong><small>En tu dirección</small></span></label></div></fieldset>${deliveryFields}<label>Nombre completo<input name="name" value="${escapeHtml(state.customer.name)}" placeholder="¿A nombre de quién?" maxlength="60" required /></label><label>Teléfono<input name="phone" type="tel" value="${escapeHtml(state.customer.phone)}" placeholder="300 000 0000" maxlength="20" required /></label><label>Indicaciones especiales <small><span id="note-count">${state.customer.notes.length}</span>/180</small><textarea name="notes" maxlength="180" placeholder="Ej: sin pitillo, alergias o alguna indicación...">${escapeHtml(state.customer.notes)}</textarea></label><fieldset class="checkout-choice payment-choice"><legend>Método de pago</legend><div class="payment-grid">${['Transferencia','Nequi','Bre-B','Efectivo'].map(method=>`<label><input type="radio" name="payment" value="${method}" ${state.payment===method?'checked':''}/><span>${method}</span></label>`).join('')}</div></fieldset><div class="summary"><div class="total"><strong>Total del pedido</strong><strong>${money(total())}</strong></div></div></form>`;
       action.innerHTML=`<button id="confirm-order">Confirmar pedido · ${money(total())}</button>`; return;
     }
-    if(!state.cart.length){ root.innerHTML='<div class="cart-empty"><i>▣</i><h3>Tu pedido está vacío</h3><p>Explora el menú y agrega algo delicioso.</p><button id="explore-menu">Explorar el menú</button></div>'; action.innerHTML=''; return; }
+    if(!state.cart.length){ root.innerHTML='<div class="cart-empty"><i><svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"></path></svg></i><h3>Tu pedido está vacío</h3><p>Explora el menú y agrega algo delicioso.</p><button id="explore-menu">Explorar el menú</button></div>'; action.innerHTML=''; return; }
     root.innerHTML=`<div class="cart-items">${state.cart.map(item=>{const p=productById(item.productId);return `<article class="cart-item"><div class="cart-thumb"><img src="${p.image}" alt="" /></div><div class="cart-info"><div class="cart-name"><strong>${p.name}</strong><button class="delete" data-delete="${item.key}" aria-label="Eliminar ${p.name}">×</button></div><p>${optionLabel(item)}</p><button class="edit" data-edit="${item.key}">✎ Editar</button><div class="cart-line">${quantityMarkup(item.quantity,item.key)}<strong>${money(item.unitPrice*item.quantity)}</strong></div></div></article>`}).join('')}</div><button class="continue" id="continue-shopping">＋ Seguir agregando</button><div class="summary"><div><span>Subtotal</span><span>${money(total())}</span></div><div><span>Servicio</span><span>$0</span></div><div class="total"><strong>Total</strong><strong>${money(total())}</strong></div></div>`;
     action.innerHTML=`<button id="go-checkout">Continuar · ${money(total())}</button>`;
   }
   function openCart(){ state.cartStep='cart'; renderCart(); showOverlay('cart'); }
   function showOverlay(name){ $(`#${name}-overlay`).hidden=false; document.body.classList.add('modal-open'); }
   function hideOverlay(name){ $(`#${name}-overlay`).hidden=true; if($$('.overlay:not([hidden])').length===0)document.body.classList.remove('modal-open'); }
+  function buildWhatsAppMessage(){
+    const items=state.cart.map((item,index)=>{
+      const product=productById(item.productId);
+      return `${index+1}. *${item.quantity} × ${product.name}*\n   • ${optionLabel(item)}\n   • ${money(item.unitPrice*item.quantity)}`;
+    }).join('\n\n');
+    const delivery=state.fulfillment==='delivery'
+      ? `🚚 *Entrega:* Domicilio\n📍 *Dirección:* ${state.customer.address.trim()}\n🏘️ *Barrio:* ${state.customer.neighborhood.trim()}\n🛵 *Domicilio:* El costo depende de la mensajería.`
+      : '🏪 *Entrega:* Recoger en OKI\n📍 Cra 25 # 47 - 31 Recreo';
+    const notes=state.customer.notes.trim()?`\n\n📝 *Indicaciones*\n${state.customer.notes.trim()}`:'';
+    return `💚 *NUEVO PEDIDO OKI - おき*\n\n👤 *Cliente*\n• Nombre: ${state.customer.name.trim()}\n• Teléfono: ${state.customer.phone.trim()}\n\n🧾 *Detalle del pedido*\n\n${items}\n\n${delivery}\n\n💳 *Método de pago:* ${state.payment}${notes}\n\n💰 *TOTAL: ${money(total())}*\n\n¡Gracias por elegir OKI! 🌿`;
+  }
   function confirmOrder(){
     const digits=state.customer.phone.replace(/\D/g,'');
     if(!state.customer.name.trim()||digits.length<7){toast('Completa tus datos','Ingresa tu nombre y un teléfono válido.');return;}
     if(state.fulfillment==='delivery'&&(!state.customer.address.trim()||!state.customer.neighborhood.trim())){toast('Completa el domicilio','Ingresa la dirección y el barrio.');return;}
     if(!state.payment){toast('Selecciona el pago','Elige un método de pago para continuar.');return;}
-    state.orderTotal=total(); state.cart=[]; saveCart(); state.cartStep='success'; renderCart();
+    state.orderTotal=total();
+    window.location.href=`https://wa.me/573028496691?text=${encodeURIComponent(buildWhatsAppMessage())}`;
   }
 
   $('#categories').addEventListener('click',event=>{const button=event.target.closest('[data-category]');if(!button)return;state.category=button.dataset.category;renderCategories();renderProducts();});
+  $('#categories').addEventListener('wheel',event=>{const root=event.currentTarget;if(root.scrollWidth<=root.clientWidth)return;const movement=Math.abs(event.deltaX)>Math.abs(event.deltaY)?event.deltaX:event.deltaY;const max=root.scrollWidth-root.clientWidth;if((movement<0&&root.scrollLeft>0)||(movement>0&&root.scrollLeft<max)){event.preventDefault();root.scrollLeft+=movement;}},{passive:false});
   $('#products').addEventListener('click',event=>{
     if(event.target.closest('[data-favorite]')){event.stopPropagation();toast('Guardado en favoritos','Lo tendrás a mano para tu próxima pausa.');return;}
     const target=event.target.closest('[data-product], [data-add]');if(!target)return;openProduct(productById(target.dataset.product||target.dataset.add));
@@ -220,6 +286,13 @@
   $('#cart-action').addEventListener('click',event=>{if(event.target.closest('#go-checkout')){state.cartStep='checkout';renderCart();}if(event.target.closest('#confirm-order'))confirmOrder();});
   $('#favorites').addEventListener('click',()=>toast('Tus favoritos','Toca el corazón de un producto para guardarlo.'));
   $('#profile').addEventListener('click',()=>toast('Perfil','Esta opción estará disponible próximamente.'));
+
+  document.body.classList.add('modal-open');
+  $('#welcome-close').addEventListener('click',()=>hideOverlay('welcome'));
+  $('#welcome-dismiss').addEventListener('click',()=>hideOverlay('welcome'));
+  $('#welcome-overlay').addEventListener('click',event=>{if(event.target.id==='welcome-overlay')hideOverlay('welcome');});
+
+  if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 
   if(document.modelContext?.registerTool){
     const controller=new AbortController();
