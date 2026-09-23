@@ -43,10 +43,10 @@
     { id:'acai-bowl', name:'Acai berries bowl', category:'Bowls', price:25000, image:img.bowl, description:'Blend de açaí, banano y berries. Top de granola, coco, chía, banano, fresa y crema de maní.', modifiers:[bowlExtra], featured:true },
     { id:'mango-bowl', name:'Mango bowl', category:'Bowls', price:25000, image:img.bowl, description:'Blend de mango, maracuyá, yogurt griego y miel. Top de granola, coco, chía, fresa, banano y arándanos.', modifiers:[bowlExtra] },
     { id:'yogurt-bowl', name:'Yogurt bowl', category:'Bowls', price:26000, image:img.bowl, description:'Blend de yogurt griego. Top de granola, coco, chía, 2 frutas y 1 salsa a elección.', modifiers:[yogurtFruit, yogurtSauce, bowlExtra] },
-    { id:'berries-lover', name:'Berries lover', category:'Smoothies', price:15000, image:img.bowl, description:'Fresa, mora, arándanos, yogurt, miel y leche a elección.', modifiers:[milk, protein] },
-    { id:'oki-smoothie', name:'Oki', category:'Smoothies', price:15000, image:img.bowl, description:'Matcha, banano, aguacate, yogurt y leche a elección.', modifiers:[milk, protein] },
-    { id:'mornings', name:'Mornings', category:'Smoothies', price:15000, image:img.bowl, description:'Maracuyá, mango, yogurt y leche a elección.', modifiers:[milk, protein] },
-    { id:'choco-banana', name:'Choco banana', category:'Smoothies', price:15000, image:img.bowl, description:'Banano, cacao, yogurt y mantequilla de maní.', modifiers:[milk, protein] },
+    { id:'berries-lover', name:'Berries lover', category:'Smoothies', price:15000, image:'./images/smoothie-berries.png', description:'Fresa, mora, arándanos, yogurt, miel y leche a elección.', modifiers:[milk, protein] },
+    { id:'oki-smoothie', name:'Oki', category:'Smoothies', price:15000, image:'./images/smoothie-oki.png', description:'Matcha, banano, aguacate, yogurt y leche a elección.', modifiers:[milk, protein] },
+    { id:'mornings', name:'Mornings', category:'Smoothies', price:15000, image:'./images/smoothie-mornings.png', description:'Maracuyá, mango, yogurt y leche a elección.', modifiers:[milk, protein] },
+    { id:'choco-banana', name:'Choco banana', category:'Smoothies', price:15000, image:'./images/smoothie-choco.png', description:'Banano, cacao, yogurt y mantequilla de maní.', modifiers:[milk, protein] },
     { id:'water', name:'Agua botella', category:'Bebidas', price:5000, image:img.drink, description:'Agua embotellada.' },
     { id:'hatsu-soda', name:'Soda Hatsu', category:'Bebidas', price:6000, image:img.drink, description:'Soda Hatsu fría.' },
     { id:'bretana', name:'Bretaña', category:'Bebidas', price:5000, image:img.drink, description:'Agua con gas Bretaña.' },
@@ -96,7 +96,7 @@
   ];
 
   const categories = ['Para ti','Toasts','Sandos','Huevos','Sweet','Drinks','Bowls','Smoothies','Bebidas','Matcha','Café','Calientes','Bakery','Milk Tea','Chai','Taro','Refreshers'];
-  const state = { category:'Para ti', query:'', active:null, selections:{}, quantity:1, editingKey:null, cart:[], cartStep:'cart', customer:{name:'',phone:'',notes:''}, orderTotal:0 };
+  const state = { category:'Para ti', query:'', active:null, selections:{}, quantity:1, editingKey:null, cart:[], cartStep:'cart', fulfillment:'pickup', payment:'Transferencia', customer:{name:'',phone:'',address:'',neighborhood:'',notes:''}, orderTotal:0 };
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const money = value => value == null ? 'Precio por confirmar' : `$${new Intl.NumberFormat('es-CO').format(value)}`;
@@ -171,7 +171,8 @@
       root.innerHTML=`<div class="success"><div class="success-mark">✓</div><p>Gracias, ${escapeHtml(state.customer.name.split(' ')[0]||'')}</p><h3>Estamos preparando<br/>tu pausa favorita.</h3><div class="order-number"><small>NÚMERO DE PEDIDO</small><strong>OKI-${String(Date.now()).slice(-4)}</strong></div><p>Te avisaremos cuando tu pedido esté listo.</p><button id="finish-order">Volver al menú</button></div>`; action.innerHTML=''; return;
     }
     if(state.cartStep==='checkout'){
-      root.innerHTML=`<form class="checkout" id="checkout-form"><div class="mode"><i>${table?'♨':'⌂'}</i><div><small>Modalidad</small><strong>${table?`Servicio en mesa ${escapeHtml(table)}`:'Recoger en OKI'}</strong></div><b>✓</b></div><label>Nombre completo<input name="name" value="${escapeHtml(state.customer.name)}" placeholder="¿A nombre de quién?" maxlength="60" required /></label><label>Teléfono<input name="phone" type="tel" value="${escapeHtml(state.customer.phone)}" placeholder="300 000 0000" maxlength="20" required /></label><label>Indicaciones especiales <small><span id="note-count">${state.customer.notes.length}</span>/180</small><textarea name="notes" maxlength="180" placeholder="Ej: sin pitillo, alergias o alguna indicación...">${escapeHtml(state.customer.notes)}</textarea></label><div class="payment"><i>▤</i><div><strong>Pago en el establecimiento</strong><span>El método se confirma al recibir tu pedido.</span></div><b>✓</b></div><div class="summary"><div class="total"><strong>Total del pedido</strong><strong>${money(total())}</strong></div></div></form>`;
+      const deliveryFields=state.fulfillment==='delivery'?`<div class="delivery-fields"><label>Dirección<input name="address" value="${escapeHtml(state.customer.address)}" placeholder="Calle, carrera, número y detalles" maxlength="120" required /></label><label>Barrio<input name="neighborhood" value="${escapeHtml(state.customer.neighborhood)}" placeholder="Nombre del barrio" maxlength="60" required /></label></div>`:'';
+      root.innerHTML=`<form class="checkout" id="checkout-form"><fieldset class="checkout-choice"><legend>¿Cómo quieres recibir tu pedido?</legend><div class="choice-grid"><label><input type="radio" name="fulfillment" value="pickup" ${state.fulfillment==='pickup'?'checked':''}/><span><b>⌂</b><strong>Recoger</strong><small>En OKI</small></span></label><label><input type="radio" name="fulfillment" value="delivery" ${state.fulfillment==='delivery'?'checked':''}/><span><b>⌖</b><strong>Domicilio</strong><small>En tu dirección</small></span></label></div></fieldset>${deliveryFields}<label>Nombre completo<input name="name" value="${escapeHtml(state.customer.name)}" placeholder="¿A nombre de quién?" maxlength="60" required /></label><label>Teléfono<input name="phone" type="tel" value="${escapeHtml(state.customer.phone)}" placeholder="300 000 0000" maxlength="20" required /></label><label>Indicaciones especiales <small><span id="note-count">${state.customer.notes.length}</span>/180</small><textarea name="notes" maxlength="180" placeholder="Ej: sin pitillo, alergias o alguna indicación...">${escapeHtml(state.customer.notes)}</textarea></label><fieldset class="checkout-choice payment-choice"><legend>Método de pago</legend><div class="payment-grid">${['Transferencia','Nequi','Bre-B','Efectivo'].map(method=>`<label><input type="radio" name="payment" value="${method}" ${state.payment===method?'checked':''}/><span>${method}</span></label>`).join('')}</div></fieldset><div class="summary"><div class="total"><strong>Total del pedido</strong><strong>${money(total())}</strong></div></div></form>`;
       action.innerHTML=`<button id="confirm-order">Confirmar pedido · ${money(total())}</button>`; return;
     }
     if(!state.cart.length){ root.innerHTML='<div class="cart-empty"><i>▣</i><h3>Tu pedido está vacío</h3><p>Explora el menú y agrega algo delicioso.</p><button id="explore-menu">Explorar el menú</button></div>'; action.innerHTML=''; return; }
@@ -184,6 +185,8 @@
   function confirmOrder(){
     const digits=state.customer.phone.replace(/\D/g,'');
     if(!state.customer.name.trim()||digits.length<7){toast('Completa tus datos','Ingresa tu nombre y un teléfono válido.');return;}
+    if(state.fulfillment==='delivery'&&(!state.customer.address.trim()||!state.customer.neighborhood.trim())){toast('Completa el domicilio','Ingresa la dirección y el barrio.');return;}
+    if(!state.payment){toast('Selecciona el pago','Elige un método de pago para continuar.');return;}
     state.orderTotal=total(); state.cart=[]; saveCart(); state.cartStep='success'; renderCart();
   }
 
@@ -213,7 +216,7 @@
     if(event.target.closest('#continue-shopping')||event.target.closest('#explore-menu'))hideOverlay('cart');
     if(event.target.closest('#finish-order')){hideOverlay('cart');state.cartStep='cart';}
   });
-  $('#cart-content').addEventListener('input',event=>{if(!event.target.name)return;state.customer[event.target.name]=event.target.value;if(event.target.name==='notes')$('#note-count').textContent=event.target.value.length;});
+  $('#cart-content').addEventListener('input',event=>{if(!event.target.name)return;if(event.target.name==='fulfillment'){state.fulfillment=event.target.value;renderCart();return;}if(event.target.name==='payment'){state.payment=event.target.value;return;}state.customer[event.target.name]=event.target.value;if(event.target.name==='notes')$('#note-count').textContent=event.target.value.length;});
   $('#cart-action').addEventListener('click',event=>{if(event.target.closest('#go-checkout')){state.cartStep='checkout';renderCart();}if(event.target.closest('#confirm-order'))confirmOrder();});
   $('#favorites').addEventListener('click',()=>toast('Tus favoritos','Toca el corazón de un producto para guardarlo.'));
   $('#profile').addEventListener('click',()=>toast('Perfil','Esta opción estará disponible próximamente.'));
