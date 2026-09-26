@@ -105,9 +105,9 @@
   ];
 
   const products = [
-    { id:'onca-s', name:'ONCA tamaño S', category:'Arma tu ONCA', price:17900, image:'./images/acai-bowl.png', description:'1 topping clásico y 1 salsa o cobertura.', modifiers:[oncaBase, classicToppings(1), oncaFinish, oncaExtras], featured:true, badge:'S' },
-    { id:'onca-m', name:'ONCA tamaño M', category:'Arma tu ONCA', price:22900, image:'./images/yogurt-bowl.png', description:'1 topping clásico, 1 topping premium y 1 salsa o cobertura.', modifiers:[oncaBase, classicToppings(1), premiumTopping, oncaFinish, oncaExtras], featured:true, badge:'M' },
-    { id:'onca-l', name:'ONCA tamaño L', category:'Arma tu ONCA', price:28900, image:'./images/mango-bowl.png', description:'2 toppings clásicos, 1 topping premium y 1 salsa o cobertura.', modifiers:[oncaBase, classicToppings(2), premiumTopping, oncaFinish, oncaExtras], featured:true, badge:'L' },
+    { id:'onca-s', name:'ONCA tamaño S', category:'Arma tu ONCA', price:17900, image:'./images/onca-card-s.png', description:'1 topping clásico y 1 salsa o cobertura.', modifiers:[oncaBase, classicToppings(1), oncaFinish, oncaExtras], featured:true, badge:'S' },
+    { id:'onca-m', name:'ONCA tamaño M', category:'Arma tu ONCA', price:22900, image:'./images/onca-card-m.png', description:'1 topping clásico, 1 topping premium y 1 salsa o cobertura.', modifiers:[oncaBase, classicToppings(1), premiumTopping, oncaFinish, oncaExtras], featured:true, badge:'M' },
+    { id:'onca-l', name:'ONCA tamaño L', category:'Arma tu ONCA', price:28900, image:'./images/onca-card-l.png', description:'2 toppings clásicos, 1 topping premium y 1 salsa o cobertura.', modifiers:[oncaBase, classicToppings(2), premiumTopping, oncaFinish, oncaExtras], featured:true, badge:'L' },
   ];
 
   const categories = ['Para ti','Arma tu ONCA'];
