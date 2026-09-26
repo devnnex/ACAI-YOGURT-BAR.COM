@@ -264,6 +264,7 @@
 
   function renderCart(){
     const root=$('#cart-content'), action=$('#cart-action');
+    $('#cart-overlay .cart-sheet')?.classList.toggle('checkout-view',state.cartStep==='checkout');
     $('#cart-kicker').textContent=state.cartStep==='cart'?'TU PEDIDO':state.cartStep==='checkout'?'FINALIZAR':'LISTO';
     $('#cart-title').textContent=state.cartStep==='cart'?'Tu pedido':state.cartStep==='checkout'?'Datos del pedido':'Pedido confirmado';
     $('#cart-back').textContent=state.cartStep==='checkout'?'←':'×';
