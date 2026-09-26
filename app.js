@@ -318,6 +318,15 @@
     field.focus({preventScroll:true});
     toast(title,copy);
   }
+  function moveNeighborhoodFromAddress(){
+    const addressField=$('#checkout-form [name="address"]'),neighborhoodField=$('#checkout-form [name="neighborhood"]');
+    if(!addressField||!neighborhoodField)return;
+    const match=addressField.value.match(/\bbarrio\b[\s,:;-]*(.+)$/i); if(!match)return;
+    const neighborhood=match[1].trim(); if(!neighborhood)return;
+    const address=addressField.value.slice(0,match.index).replace(/[\s,;:-]+$/,'').trim();
+    state.customer.address=address; state.customer.neighborhood=neighborhood;
+    addressField.value=address; neighborhoodField.value=neighborhood;
+  }
   function confirmOrder(){
     const digits=state.customer.phone.replace(/\D/g,'');
     if(state.fulfillment==='delivery'&&!state.customer.address.trim()){guideCheckoutField('[name="address"]','Completa el domicilio','Ingresa la dirección para continuar.');return;}
@@ -362,6 +371,7 @@
     if(event.target.closest('#finish-order')){hideOverlay('cart');state.cartStep='cart';}
   });
   $('#cart-content').addEventListener('input',event=>{if(!event.target.name)return;event.target.closest('.checkout-attention')?.classList.remove('checkout-attention');if(event.target.name==='fulfillment'){state.fulfillment=event.target.value;renderCart();return;}if(event.target.name==='payment'){state.payment=event.target.value;return;}state.customer[event.target.name]=event.target.value;if(event.target.name==='notes')$('#note-count').textContent=event.target.value.length;});
+  $('#cart-content').addEventListener('focusout',event=>{if(event.target.name==='address')moveNeighborhoodFromAddress();});
   $('#cart-action').addEventListener('click',event=>{if(event.target.closest('#go-checkout')){state.cartStep='checkout';renderCart();}if(event.target.closest('#confirm-order'))confirmOrder();});
   $('#favorites').addEventListener('click',()=>toast('Tus favoritos','Toca el corazón de un producto para guardarlo.'));
   $('#profile').addEventListener('click',()=>toast('Perfil','Esta opción estará disponible próximamente.'));
