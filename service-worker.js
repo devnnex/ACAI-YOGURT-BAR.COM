@@ -1,4 +1,4 @@
-const CACHE_NAME = 'onca-pwa-v3';
+const CACHE_NAME = 'onca-pwa-v4';
 const APP_SHELL = [
   './',
   './index.html',

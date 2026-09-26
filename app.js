@@ -309,11 +309,22 @@
     const notes=state.customer.notes.trim()?`\n\n📝 *Indicaciones*\n${state.customer.notes.trim()}`:'';
     return `💜 *NUEVO PEDIDO · ONCA AÇAÍ*\n\n👤 *Cliente*\n• Nombre: ${state.customer.name.trim()}\n• Teléfono: ${state.customer.phone.trim()}\n\n🧾 *Detalle del pedido*\n\n${items}\n\n${delivery}\n\n💳 *Método de pago:* ${state.payment}${notes}\n\n💰 *TOTAL: ${money(total())}*\n\n¡Gracias por elegir ONCA Açaí! 💜`;
   }
+  function guideCheckoutField(selector,title,copy){
+    const form=$('#checkout-form'),field=form?.querySelector(selector); if(!field)return;
+    $$('.checkout-attention',form).forEach(node=>node.classList.remove('checkout-attention'));
+    const target=field.type==='radio'?(field.closest('.checkout-choice')||field):(field.closest('label')||field);
+    target.classList.remove('checkout-attention'); void target.offsetWidth; target.classList.add('checkout-attention');
+    target.scrollIntoView({behavior:'auto',block:'center'});
+    field.focus({preventScroll:true});
+    toast(title,copy);
+  }
   function confirmOrder(){
     const digits=state.customer.phone.replace(/\D/g,'');
-    if(!state.customer.name.trim()||digits.length<7){toast('Completa tus datos','Ingresa tu nombre y un teléfono válido.');return;}
-    if(state.fulfillment==='delivery'&&(!state.customer.address.trim()||!state.customer.neighborhood.trim())){toast('Completa el domicilio','Ingresa la dirección y el barrio.');return;}
-    if(!state.payment){toast('Selecciona el pago','Elige un método de pago para continuar.');return;}
+    if(state.fulfillment==='delivery'&&!state.customer.address.trim()){guideCheckoutField('[name="address"]','Completa el domicilio','Ingresa la dirección para continuar.');return;}
+    if(state.fulfillment==='delivery'&&!state.customer.neighborhood.trim()){guideCheckoutField('[name="neighborhood"]','Completa el domicilio','Ingresa el barrio para continuar.');return;}
+    if(!state.customer.name.trim()){guideCheckoutField('[name="name"]','Completa tus datos','Ingresa tu nombre para continuar.');return;}
+    if(digits.length<7){guideCheckoutField('[name="phone"]','Completa tus datos','Ingresa un teléfono válido para continuar.');return;}
+    if(!state.payment){guideCheckoutField('[name="payment"]','Selecciona el pago','Elige un método de pago para continuar.');return;}
     state.orderTotal=total();
     window.location.href=`https://wa.me/573014888443?text=${encodeURIComponent(buildWhatsAppMessage())}`;
   }
@@ -350,7 +361,7 @@
     if(event.target.closest('#continue-shopping')||event.target.closest('#explore-menu'))hideOverlay('cart');
     if(event.target.closest('#finish-order')){hideOverlay('cart');state.cartStep='cart';}
   });
-  $('#cart-content').addEventListener('input',event=>{if(!event.target.name)return;if(event.target.name==='fulfillment'){state.fulfillment=event.target.value;renderCart();return;}if(event.target.name==='payment'){state.payment=event.target.value;return;}state.customer[event.target.name]=event.target.value;if(event.target.name==='notes')$('#note-count').textContent=event.target.value.length;});
+  $('#cart-content').addEventListener('input',event=>{if(!event.target.name)return;event.target.closest('.checkout-attention')?.classList.remove('checkout-attention');if(event.target.name==='fulfillment'){state.fulfillment=event.target.value;renderCart();return;}if(event.target.name==='payment'){state.payment=event.target.value;return;}state.customer[event.target.name]=event.target.value;if(event.target.name==='notes')$('#note-count').textContent=event.target.value.length;});
   $('#cart-action').addEventListener('click',event=>{if(event.target.closest('#go-checkout')){state.cartStep='checkout';renderCart();}if(event.target.closest('#confirm-order'))confirmOrder();});
   $('#favorites').addEventListener('click',()=>toast('Tus favoritos','Toca el corazón de un producto para guardarlo.'));
   $('#profile').addEventListener('click',()=>toast('Perfil','Esta opción estará disponible próximamente.'));
