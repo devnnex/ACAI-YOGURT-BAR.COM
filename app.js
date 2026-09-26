@@ -361,6 +361,7 @@
   $('[data-close="product"]').addEventListener('click',()=>hideOverlay('product'));
   $('#product-overlay').addEventListener('click',event=>{if(event.target.id==='product-overlay')hideOverlay('product');});
   $('#header-cart').addEventListener('click',openCart);$('#nav-cart').addEventListener('click',openCart);
+  $('#cart-overlay').addEventListener('pointerdown',event=>{const addressField=$('#checkout-form [name="address"]');if(addressField&&event.target!==addressField)moveNeighborhoodFromAddress();});
   $('#cart-overlay').addEventListener('click',event=>{if(event.target.id==='cart-overlay')hideOverlay('cart');});
   $('#cart-back').addEventListener('click',()=>{if(state.cartStep==='checkout'){state.cartStep='cart';renderCart();}else hideOverlay('cart');});
   $('#cart-content').addEventListener('click',event=>{
