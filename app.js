@@ -26,8 +26,8 @@
   const finishOptions = [option('condensed-milk', 'Lechera'), option('arequipe', 'Arequipe'), option('honey', 'Miel de abeja'), option('dark-chocolate', 'Chocolate negro · Sin azúcar'), option('white-chocolate', 'Chocolate blanco · Sin azúcar'), option('peanut-cream', 'Crema de maní'), option('acai-flower-honey', 'Miel de flor de açaí', 2500), option('sugar-free-condensed-milk', 'Lechera sin azúcar', 2500), option('sugar-free-arequipe', 'Arequipe sin azúcar', 2500), option('pistachio-sauce', 'Salsa de pistacho', 2500), option('almond-butter', 'Mantequilla de almendras', 2500), option('nutella-style', 'Choco cobertura tipo Nutella'), option('pistachio-stracciatella', 'Stracciatella de pistacho', 3500), option('white-stracciatella', 'Stracciatella blanca', 3500), option('chocolate-stracciatella', 'Stracciatella de chocolate', 3500), option('sugar-free-semisweet', 'Semiamargo · Sin azúcar')];
   const oncaExtras = group('extras', 'Adicionales', 'multiple', [option('extra-classic', 'Topping clásico', 2000), option('extra-premium', 'Topping premium', 2800), option('extra-special-premium', 'Topping premium especial', 3400), option('extra-sauce', 'Salsa', 2800), option('extra-cover', 'Cobertura', 3700)], { max: 5 });
   const classicToppings = count => group('classic-toppings', `Elige ${count} topping${count > 1 ? 's' : ''} clásico${count > 1 ? 's' : ''}`, 'multiple', classicOptions, { required: true, min: count, max: count });
-  const premiumTopping = group('premium-topping', 'Elige 1 topping premium', 'single', premiumOptions, { required: true, min: 1, max: 1 });
-  const oncaFinish = group('finish', 'Elige 1 salsa o cobertura', 'single', finishOptions, { required: true, min: 1, max: 1 });
+  const premiumTopping = group('premium-topping', 'Elige 1 topping premium', 'mixed', premiumOptions, { required: true, requiredIncluded: 1 });
+  const oncaFinish = group('finish', 'Elige 1 salsa o cobertura', 'mixed', finishOptions, { required: true, requiredIncluded: 1 });
 
   const legacyProducts = [
     // Imagen 1 · All day, OKI
@@ -199,12 +199,19 @@
     </article>`).join('');
   }
 
-  function defaultSelections(product){ const values={}; (product.modifiers||[]).forEach(g=>values[g.id]=g.type==='single'?[g.options[0].id]:[]); return values; }
+  function defaultSelections(product){ const values={}; (product.modifiers||[]).forEach(g=>values[g.id]=[]); return values; }
   function selectedUnitPrice(){
     if(!state.active||state.active.price==null) return 0;
     return state.active.price+(state.active.modifiers||[]).reduce((sum,g)=>sum+(state.selections[g.id]||[]).reduce((s,id)=>s+(g.options.find(o=>o.id===id)?.price||0),0),0);
   }
-  function validSelection(){ return (state.active?.modifiers||[]).every(g=>!g.required||(state.selections[g.id]?.length||0)>=(g.min||1)); }
+  function groupIsComplete(group){
+    if(!group.required)return true;
+    const selected=state.selections[group.id]||[];
+    if(group.requiredIncluded)return selected.filter(id=>(group.options.find(option=>option.id===id)?.price||0)===0).length>=group.requiredIncluded;
+    return selected.length>=(group.min||1);
+  }
+  function firstMissingGroup(){ return (state.active?.modifiers||[]).find(group=>!groupIsComplete(group)); }
+  function validSelection(){ return !firstMissingGroup(); }
   function optionLabel(item){
     const product=productById(item.productId);
     return Object.entries(item.selections).flatMap(([groupId,ids])=>{ const g=product.modifiers?.find(entry=>entry.id===groupId); return ids.map(id=>g?.options.find(o=>o.id===id)?.name).filter(Boolean); }).join(' · ')||'Preparación original';
@@ -218,14 +225,39 @@
   }
   function renderProductDetail(){
     const p=state.active; if(!p)return;
-    const groups=(p.modifiers||[]).map(g=>`<fieldset class="modifier"><legend>${g.name}<small>${g.required?'Obligatorio':`Opcional${g.max?` · Máx. ${g.max}`:''}`}</small></legend>${g.options.map(o=>{
-      const checked=(state.selections[g.id]||[]).includes(o.id); return `<label class="option"><span><input type="${g.type==='single'?'radio':'checkbox'}" name="${g.id}" value="${o.id}" data-group="${g.id}" ${checked?'checked':''}/>${o.name}</span><em>${o.price?`+${money(o.price)}`:'Incluido'}</em></label>`;
+    const groups=(p.modifiers||[]).map(g=>`<fieldset class="modifier" data-modifier="${g.id}" tabindex="-1"><legend>${g.name}<small class="requirement-badge ${g.required&&!groupIsComplete(g)?'is-pending':''}">${g.required?'Obligatorio':`Opcional${g.max?` · Máx. ${g.max}`:''}`}</small></legend>${g.options.map(o=>{
+      const checked=(state.selections[g.id]||[]).includes(o.id);
+      const inputType=g.type==='mixed'?(o.price?'checkbox':'radio'):(g.type==='single'?'radio':'checkbox');
+      const inputName=g.type==='mixed'&&o.price?`${g.id}-paid`:g.id;
+      return `<label class="option"><span><input type="${inputType}" name="${inputName}" value="${o.id}" data-group="${g.id}" ${checked?'checked':''}/>${o.name}</span><em>${o.price?`+${money(o.price)}`:'Incluido'}</em></label>`;
     }).join('')}</fieldset>`).join('');
-    $('#product-detail').innerHTML=`<div class="detail-content"><div class="detail-photo"><img src="${p.image}" alt="${p.name}" /></div><div class="detail-head"><div><h2 id="product-title">${p.name}</h2><p>${p.description}</p></div><strong>${money(p.price)}</strong></div><div class="modifier-list">${groups}<div class="qty-block"><div><strong>Cantidad</strong><small>¿Cuántos quieres?</small></div>${quantityMarkup(state.quantity)}</div></div></div><div class="sticky-action"><button id="add-product" ${validSelection()?'':'disabled'}>${state.editingKey?'Actualizar pedido':'Agregar al pedido'} · <span id="detail-total">${money(selectedUnitPrice()*state.quantity)}</span></button></div>`;
+    const complete=validSelection();
+    $('#product-detail').innerHTML=`<div class="detail-content"><div class="detail-photo"><img src="${p.image}" alt="${p.name}" /></div><div class="detail-head"><div><h2 id="product-title">${p.name}</h2><p>${p.description}</p></div><strong>${money(p.price)}</strong></div><div class="modifier-list">${groups}<div class="qty-block"><div><strong>Cantidad</strong><small>¿Cuántos quieres?</small></div>${quantityMarkup(state.quantity)}</div></div></div><div class="sticky-action"><button id="add-product" class="${complete?'':'is-disabled'}" aria-disabled="${!complete}">${state.editingKey?'Actualizar pedido':'Agregar al pedido'} · <span id="detail-total">${money(selectedUnitPrice()*state.quantity)}</span></button></div>`;
   }
-  function refreshDetailTotal(){ const el=$('#detail-total'); if(el)el.textContent=money(selectedUnitPrice()*state.quantity); const qty=$('[data-quantity="detail"] b'); if(qty)qty.textContent=state.quantity; const button=$('#add-product'); if(button)button.disabled=!validSelection(); }
+  function refreshDetailTotal(){
+    const el=$('#detail-total'); if(el)el.textContent=money(selectedUnitPrice()*state.quantity);
+    const qty=$('[data-quantity="detail"] b'); if(qty)qty.textContent=state.quantity;
+    (state.active?.modifiers||[]).forEach(group=>{
+      const field=$$('.modifier').find(node=>node.dataset.modifier===group.id);
+      const complete=groupIsComplete(group);
+      field?.querySelector('.requirement-badge')?.classList.toggle('is-pending',group.required&&!complete);
+      if(complete)field?.classList.remove('modifier-attention');
+    });
+    const complete=validSelection(), button=$('#add-product');
+    if(button){button.classList.toggle('is-disabled',!complete);button.setAttribute('aria-disabled',String(!complete));}
+  }
+  function guideToFirstMissing(){
+    const missing=firstMissingGroup(); if(!missing)return false;
+    const field=$$('.modifier').find(node=>node.dataset.modifier===missing.id); if(!field)return true;
+    $$('.modifier-attention').forEach(node=>node.classList.remove('modifier-attention'));
+    field.classList.remove('modifier-attention'); void field.offsetWidth; field.classList.add('modifier-attention');
+    field.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(()=>field.focus({preventScroll:true}),320);
+    return true;
+  }
   function addActive(){
-    if(!state.active||!validSelection())return;
+    if(!state.active)return;
+    if(!validSelection()){guideToFirstMissing();return;}
     const item={key:state.editingKey||`${state.active.id}-${Date.now()}`,productId:state.active.id,quantity:state.quantity,selections:structuredClone(state.selections),unitPrice:selectedUnitPrice()};
     state.cart=state.editingKey?state.cart.map(entry=>entry.key===state.editingKey?item:entry):[...state.cart,item]; saveCart(); hideOverlay('product'); toast(state.editingKey?'Producto actualizado':'Agregado a tu pedido',`${item.quantity} × ${state.active.name}`); state.active=null; state.editingKey=null;
   }
@@ -253,13 +285,28 @@
   function buildWhatsAppMessage(){
     const items=state.cart.map((item,index)=>{
       const product=productById(item.productId);
-      return `${index+1}. *${item.quantity} × ${product.name}*\n   • ${optionLabel(item)}\n   • ${money(item.unitPrice*item.quantity)}`;
+      const detail=(product.modifiers||[]).flatMap(group=>{
+        const selected=(item.selections[group.id]||[]).map(id=>group.options.find(option=>option.id===id)).filter(Boolean);
+        const included=selected.filter(option=>!option.price);
+        const paid=selected.filter(option=>option.price);
+        const lines=[];
+        if(included.length){
+          const label=group.id==='base'?'Base':group.id==='classic-toppings'?(included.length>1?'Toppings clásicos incluidos':'Topping clásico incluido'):group.id==='premium-topping'?'Topping premium incluido':group.id==='finish'?'Salsa o cobertura incluida':group.name;
+          lines.push(`   • ${label}: ${included.map(option=>option.name).join(', ')}`);
+        }
+        paid.forEach(option=>{
+          const label=group.id==='premium-topping'?'Adicional premium':group.id==='finish'?'Adicional de salsa o cobertura':'Adicional';
+          lines.push(`   • ${label}: ${option.name} (+${money(option.price)} por unidad)`);
+        });
+        return lines;
+      }).join('\n');
+      return `${index+1}. *${product.name}*\n   • Cantidad: ${item.quantity}\n${detail}\n   • Valor unitario: ${money(item.unitPrice)}\n   • Subtotal: ${money(item.unitPrice*item.quantity)}`;
     }).join('\n\n');
     const delivery=state.fulfillment==='delivery'
       ? `🚚 *Entrega:* Domicilio\n📍 *Dirección:* ${state.customer.address.trim()}\n🏘️ *Barrio:* ${state.customer.neighborhood.trim()}\n🛵 *Domicilio:* El costo depende de la mensajería.`
       : '🏪 *Entrega:* Recoger en ONCA Açaí\n📍 Cra 25 # 47 - 59 B. El Recreo';
     const notes=state.customer.notes.trim()?`\n\n📝 *Indicaciones*\n${state.customer.notes.trim()}`:'';
-    return `🫐 *NUEVO PEDIDO ONCA AÇAÍ*\n\n👤 *Cliente*\n• Nombre: ${state.customer.name.trim()}\n• Teléfono: ${state.customer.phone.trim()}\n\n🧾 *Detalle del pedido*\n\n${items}\n\n${delivery}\n\n💳 *Método de pago:* ${state.payment}${notes}\n\n💰 *TOTAL: ${money(total())}*\n\n¡Gracias por elegir ONCA Açaí! 🍃`;
+    return `💜 *NUEVO PEDIDO · ONCA AÇAÍ*\n\n👤 *Cliente*\n• Nombre: ${state.customer.name.trim()}\n• Teléfono: ${state.customer.phone.trim()}\n\n🧾 *Detalle del pedido*\n\n${items}\n\n${delivery}\n\n💳 *Método de pago:* ${state.payment}${notes}\n\n💰 *TOTAL: ${money(total())}*\n\n¡Gracias por elegir ONCA Açaí! 💜`;
   }
   function confirmOrder(){
     const digits=state.customer.phone.replace(/\D/g,'');
@@ -282,7 +329,12 @@
   $('#products').addEventListener('click',event=>{if(event.target.id==='reset-filter'){state.query='';state.category='Para ti';$('#search').value='';renderCategories();renderProducts();}});
   $('#product-detail').addEventListener('change',event=>{
     const input=event.target.closest('[data-group]');if(!input)return;const g=state.active.modifiers.find(entry=>entry.id===input.dataset.group);
-    if(g.type==='single')state.selections[g.id]=[input.value];else{const current=state.selections[g.id]||[];if(input.checked){if(current.length>=(g.max||99)){input.checked=false;toast('Máximo alcanzado',`Puedes elegir hasta ${g.max} opciones.`);return;}state.selections[g.id]=[...current,input.value];}else state.selections[g.id]=current.filter(id=>id!==input.value);}refreshDetailTotal();
+    const current=state.selections[g.id]||[], selectedOption=g.options.find(option=>option.id===input.value);
+    if(g.type==='single')state.selections[g.id]=[input.value];
+    else if(g.type==='mixed'&&!selectedOption.price)state.selections[g.id]=[...current.filter(id=>(g.options.find(option=>option.id===id)?.price||0)>0),input.value];
+    else if(input.checked){if(g.max&&current.length>=g.max){input.checked=false;toast('Máximo alcanzado',`Puedes elegir hasta ${g.max} opciones.`);return;}state.selections[g.id]=[...current,input.value];}
+    else state.selections[g.id]=current.filter(id=>id!==input.value);
+    refreshDetailTotal();
   });
   $('#product-detail').addEventListener('click',event=>{const qty=event.target.closest('[data-qty]');if(qty){state.quantity=Math.max(1,state.quantity+(qty.dataset.qty==='plus'?1:-1));refreshDetailTotal();}if(event.target.closest('#add-product'))addActive();});
   $('[data-close="product"]').addEventListener('click',()=>hideOverlay('product'));
@@ -312,7 +364,7 @@
   if(document.modelContext?.registerTool){
     const controller=new AbortController();
     document.modelContext.registerTool({name:'read_onca_menu',title:'Consultar menú de ONCA Açaí',description:'Devuelve el menú completo disponible con tamaños y precios.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute:()=>({products:products.filter(p=>p.price!=null).map(({id,name,category,price})=>({id,name,category,price}))})},{signal:controller.signal});
-    document.modelContext.registerTool({name:'add_onca_product_to_cart',title:'Agregar producto al pedido',description:'Agrega un tamaño disponible al carrito con sus opciones predeterminadas.',inputSchema:{type:'object',properties:{productId:{type:'string'},quantity:{type:'integer',minimum:1,maximum:20}},required:['productId','quantity'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:({productId,quantity})=>{const p=productById(productId);if(!p||p.price==null||!Number.isInteger(quantity)||quantity<1||quantity>20)throw new Error('Producto o cantidad no válidos.');state.cart.push({key:`${p.id}-${Date.now()}`,productId:p.id,quantity,selections:defaultSelections(p),unitPrice:p.price});saveCart();return{status:'added',product:p.name,quantity};}},{signal:controller.signal});
+    document.modelContext.registerTool({name:'add_onca_product_to_cart',title:'Agregar producto al pedido',description:'Abre la personalización de un tamaño para completar todas sus elecciones obligatorias antes de agregarlo.',inputSchema:{type:'object',properties:{productId:{type:'string'},quantity:{type:'integer',minimum:1,maximum:20}},required:['productId','quantity'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:({productId,quantity})=>{const p=productById(productId);if(!p||p.price==null||!Number.isInteger(quantity)||quantity<1||quantity>20)throw new Error('Producto o cantidad no válidos.');throw new Error('Este producto requiere elegir todas las opciones obligatorias en la pantalla de personalización.');}},{signal:controller.signal});
   }
 
   renderCategories();renderProducts(true);updateCounts();setTimeout(()=>renderProducts(),320);
