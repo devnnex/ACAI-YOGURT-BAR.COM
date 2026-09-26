@@ -83,3 +83,9 @@ html,body{max-width:100%;overflow-x:hidden;overflow-x:clip}
 .order-number{border-color:#c69fd4}
 @keyframes open-pulse{0%,100%{opacity:.55;box-shadow:0 0 0 3px rgba(193,139,210,.14)}50%{opacity:1;box-shadow:0 0 0 7px rgba(193,139,210,.28)}}
 @media(min-width:700px) and (pointer:fine){html,.detail-content,.sheet-scroll{scrollbar-color:var(--ink) #eadcf0}html::-webkit-scrollbar-track,body::-webkit-scrollbar-track,.detail-content::-webkit-scrollbar-track,.sheet-scroll::-webkit-scrollbar-track{background:#eadcf0}html::-webkit-scrollbar-thumb,body::-webkit-scrollbar-thumb,.detail-content::-webkit-scrollbar-thumb,.sheet-scroll::-webkit-scrollbar-thumb{border-color:#eadcf0}}
+
+/* Logo e iconos informativos */
+.brand{height:78px}
+.brand img{object-fit:contain}
+.info-icon{width:15px;height:15px;flex:0 0 auto;fill:none;stroke:#8b145e;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+@media(min-width:700px){.brand{height:88px}}
