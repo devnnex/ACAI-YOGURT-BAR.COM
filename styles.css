@@ -32,3 +32,39 @@ html,body{max-width:100%;overflow-x:hidden;overflow-x:clip}
 @media(min-width:700px){.store-info{grid-template-columns:1fr auto;align-items:center}.store-details{text-align:right}.welcome-dialog{padding:38px 34px 30px}}
 @media(prefers-reduced-motion:reduce){.welcome-dialog{animation:none}}
 @media(prefers-reduced-motion:reduce){.open i{animation:none}}
+
+/* Identidad ONCA Açaí */
+:root{--bg:#f8f1e8;--ink:#3b082c;--muted:#756470;--lime:#d6d4bb;--line:#e3ccd4;--white:#fff;--orange:#8b145e;--danger:#a8405c;--shadow:0 14px 42px rgba(59,8,44,.11)}
+.brand{width:154px;height:58px;display:block;overflow:hidden;line-height:1;letter-spacing:0}
+.brand img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
+.slogan{color:#8b145e}
+.cart-count,.add,.bottom-nav i{background:#8b145e}
+.icon-button,.location-card,.product-card,.modifier,.qty-block,.cart-item,.checkout-choice,.checkout input,.checkout textarea{box-shadow-color:rgba(59,8,44,.08)}
+.location-icon,.success-mark{background:#d6d4bb}
+.hero{background:#d6d4bb}
+.hero:after{background:rgba(255,255,255,.38)}
+.search button,.modifier legend small{background:#f0e1e6;color:#8b145e}
+.section-head small,.store-about span,.sheet-header small,.edit,.continue{color:#8b145e}
+.open i{background:#596126;box-shadow:0 0 0 4px rgba(89,97,38,.14)}
+.categories button{color:#715d69}
+.product-image,.detail-photo{background:#efe4e3}
+.product-badge{background:rgba(139,20,94,.92)}
+.empty{border-color:#dcc1cb}
+.skeleton{background:linear-gradient(100deg,#eadde0 20%,#f8f1e8 38%,#eadde0 56%);background-size:200% 100%}
+.bottom-nav{border-color:rgba(227,204,212,.9);box-shadow:0 16px 45px rgba(59,8,44,.18)}
+.overlay{background:rgba(59,8,44,.32)}
+.sheet{box-shadow:0 -20px 60px rgba(59,8,44,.24)}
+.sticky-action{background:rgba(248,241,232,.93)}
+.summary{background:#e4e2cc}
+.summary>div{color:#66515f}
+.summary .total{border-color:#c8c5a7}
+.checkout-choice input:checked+span{background:#e4e2cc;box-shadow:0 0 0 2px rgba(59,8,44,.08)}
+.store-info{border-color:rgba(139,20,94,.12);background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(234,215,220,.88));box-shadow:0 8px 24px rgba(59,8,44,.08)}
+.store-info:after{background:rgba(214,212,187,.78)}
+.store-details{color:#66535f}
+.welcome-dialog{border-color:#e3ccd4;background:linear-gradient(155deg,#fff 0%,#fcf7f1 62%,#ead7dc 100%);box-shadow:0 28px 80px rgba(59,8,44,.3)}
+.welcome-dialog:before{background:rgba(214,212,187,.66)}
+.welcome-mark{background:#8b145e;box-shadow:0 12px 28px rgba(139,20,94,.22)}
+.welcome-dialog small{color:#8b145e}
+.welcome-dialog p{color:#66535f}
+@media(min-width:700px){.brand{width:178px;height:66px}}

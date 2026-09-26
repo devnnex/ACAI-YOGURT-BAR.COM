@@ -1,13 +1,13 @@
-const CACHE_NAME = 'oki-pwa-v1';
+const CACHE_NAME = 'onca-pwa-v1';
 const APP_SHELL = [
   './',
   './index.html',
   './styles.css',
   './app.js',
   './manifest.webmanifest',
-  './public/favicon.svg',
-  './images/oki-app-icon-192.png',
-  './images/oki-app-icon-512.png'
+  './images/onca-logo.png',
+  './images/onca-app-icon-192.png',
+  './images/onca-app-icon-512.png'
 ];
 
 self.addEventListener('install', event => {

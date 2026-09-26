@@ -20,7 +20,16 @@
   const yogurtFruit = group('fruit-choice', 'Elige 2 frutas', 'multiple', [option('banana', 'Banano'), option('strawberry', 'Fresa'), option('blueberry', 'Arándanos'), option('mango', 'Mango')], { required: true, min: 2, max: 2 });
   const yogurtSauce = group('sauce-choice', 'Elige 1 salsa', 'single', [option('honey', 'Miel'), option('peanut', 'Crema de maní'), option('chocolate', 'Chocolate')], { required: true, min: 1, max: 1 });
 
-  const products = [
+  const oncaBase = group('base', 'Elige tu base · Sugar free', 'single', [option('yogurt', 'Yogurt'), option('mix', 'Mix'), option('acai', 'Açaí')], { required: true, min: 1, max: 1 });
+  const classicOptions = [option('banana', 'Banano'), option('pineapple', 'Piña'), option('mango', 'Mango'), option('peanut', 'Maní partido'), option('milo', 'Milo'), option('chia-pudding', 'Pudín de chía'), option('oreo', 'Oreo triturada'), option('chocolate-chips', 'Chips de chocolate'), option('coconut', 'Coco deshidratado'), option('milk-powder', 'Leche en polvo'), option('strawberry', 'Fresa'), option('nut-granola', 'Granola de frutos secos'), option('oats', 'Avena'), option('greek-yogurt', 'Yogurt griego')];
+  const premiumOptions = [option('chocolate-granola', 'Granola de chocolate'), option('watermelon-gel', 'Burbuja de gel de sandía'), option('blueberry-gel', 'Burbuja de gel de arándanos'), option('kiwi', 'Kiwi'), option('blueberries', 'Arándanos'), option('sliced-almonds', 'Almendras rebanadas'), option('sugar-free-brownie', 'Brownie sin azúcar'), option('mms', 'Grageas M&M', 2500), option('choco-crunch', 'Choco Crunch', 2500), option('natif-quinoa', 'Natif | Quinoa recubierta', 2500)];
+  const finishOptions = [option('condensed-milk', 'Lechera'), option('arequipe', 'Arequipe'), option('honey', 'Miel de abeja'), option('dark-chocolate', 'Chocolate negro · Sin azúcar'), option('white-chocolate', 'Chocolate blanco · Sin azúcar'), option('peanut-cream', 'Crema de maní'), option('acai-flower-honey', 'Miel de flor de açaí', 2500), option('sugar-free-condensed-milk', 'Lechera sin azúcar', 2500), option('sugar-free-arequipe', 'Arequipe sin azúcar', 2500), option('pistachio-sauce', 'Salsa de pistacho', 2500), option('almond-butter', 'Mantequilla de almendras', 2500), option('nutella-style', 'Choco cobertura tipo Nutella'), option('pistachio-stracciatella', 'Stracciatella de pistacho', 3500), option('white-stracciatella', 'Stracciatella blanca', 3500), option('chocolate-stracciatella', 'Stracciatella de chocolate', 3500), option('sugar-free-semisweet', 'Semiamargo · Sin azúcar')];
+  const oncaExtras = group('extras', 'Adicionales', 'multiple', [option('extra-classic', 'Topping clásico', 2000), option('extra-premium', 'Topping premium', 2800), option('extra-special-premium', 'Topping premium especial', 3400), option('extra-sauce', 'Salsa', 2800), option('extra-cover', 'Cobertura', 3700)], { max: 5 });
+  const classicToppings = count => group('classic-toppings', `Elige ${count} topping${count > 1 ? 's' : ''} clásico${count > 1 ? 's' : ''}`, 'multiple', classicOptions, { required: true, min: count, max: count });
+  const premiumTopping = group('premium-topping', 'Elige 1 topping premium', 'single', premiumOptions, { required: true, min: 1, max: 1 });
+  const oncaFinish = group('finish', 'Elige 1 salsa o cobertura', 'single', finishOptions, { required: true, min: 1, max: 1 });
+
+  const legacyProducts = [
     // Imagen 1 · All day, OKI
     { id:'mozzarella-toast', name:'Mozzarella toast', category:'Toasts', price:27000, image:'./images/mozzarella-toast.png', description:'Jamón serrano, mozzarella de búfala, aguacate, cebollas encurtidas y miel.', modifiers:[toastExtra], featured:true },
     { id:'morning-toast', name:'Morning toast', category:'Toasts', price:25000, image:'./images/morning-toast.png', description:'Huevo cremoso, queso fresco, tocino crunchy, aguacate y dip de queso crema.', modifiers:[toastExtra], featured:true },
@@ -95,7 +104,13 @@
     { id:'peach-tea', name:'Peach tea', category:'Refreshers', price:13000, image:img.drink, description:'Té verde, durazno y zumo de limón.', modifiers:[topping] },
   ];
 
-  const categories = ['Para ti','Toasts','Sandos','Huevos','Sweet','Drinks','Bowls','Smoothies','Bebidas','Matcha','Café','Calientes','Bakery','Milk Tea','Chai','Taro','Refreshers'];
+  const products = [
+    { id:'onca-s', name:'ONCA tamaño S', category:'Arma tu ONCA', price:17900, image:'./images/acai-bowl.png', description:'1 topping clásico y 1 salsa o cobertura.', modifiers:[oncaBase, classicToppings(1), oncaFinish, oncaExtras], featured:true, badge:'S' },
+    { id:'onca-m', name:'ONCA tamaño M', category:'Arma tu ONCA', price:22900, image:'./images/yogurt-bowl.png', description:'1 topping clásico, 1 topping premium y 1 salsa o cobertura.', modifiers:[oncaBase, classicToppings(1), premiumTopping, oncaFinish, oncaExtras], featured:true, badge:'M' },
+    { id:'onca-l', name:'ONCA tamaño L', category:'Arma tu ONCA', price:28900, image:'./images/mango-bowl.png', description:'2 toppings clásicos, 1 topping premium y 1 salsa o cobertura.', modifiers:[oncaBase, classicToppings(2), premiumTopping, oncaFinish, oncaExtras], featured:true, badge:'L' },
+  ];
+
+  const categories = ['Para ti','Arma tu ONCA'];
   const assignedProductImages = {
     'banana-caramel':'./images/banana-caramel.png',
     pancakes:'./images/pancakes.png',
@@ -153,11 +168,11 @@
   const money = value => value == null ? 'Precio por confirmar' : `$${new Intl.NumberFormat('es-CO').format(value)}`;
   const escapeHtml = value => String(value).replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
 
-  try { state.cart = JSON.parse(localStorage.getItem('oki-cart-v2') || '[]'); } catch { state.cart = []; }
+  try { state.cart = JSON.parse(localStorage.getItem('onca-cart-v1') || '[]'); } catch { state.cart = []; }
   const table = new URLSearchParams(location.search).get('table');
   if (table) $('#order-location').textContent = `Mesa ${table}`;
 
-  function saveCart(){ localStorage.setItem('oki-cart-v2', JSON.stringify(state.cart)); updateCounts(); }
+  function saveCart(){ localStorage.setItem('onca-cart-v1', JSON.stringify(state.cart)); updateCounts(); }
   function updateCounts(){ const count = state.cart.reduce((sum,item)=>sum+item.quantity,0); $$('.cart-count').forEach(node=>node.textContent=count); }
   function toast(title, copy=''){ const el=$('#toast'); $('#toast-title').textContent=title; $('#toast-copy').textContent=copy; el.hidden=false; clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.hidden=true,2600); }
   function total(){ return state.cart.reduce((sum,item)=>sum+item.unitPrice*item.quantity,0); }
@@ -221,11 +236,11 @@
     $('#cart-title').textContent=state.cartStep==='cart'?'Tu pedido':state.cartStep==='checkout'?'Datos del pedido':'Pedido confirmado';
     $('#cart-back').textContent=state.cartStep==='checkout'?'←':'×';
     if(state.cartStep==='success'){
-      root.innerHTML=`<div class="success"><div class="success-mark">✓</div><p>Gracias, ${escapeHtml(state.customer.name.split(' ')[0]||'')}</p><h3>Estamos preparando<br/>tu pausa favorita.</h3><div class="order-number"><small>NÚMERO DE PEDIDO</small><strong>OKI-${String(Date.now()).slice(-4)}</strong></div><p>Te avisaremos cuando tu pedido esté listo.</p><button id="finish-order">Volver al menú</button></div>`; action.innerHTML=''; return;
+      root.innerHTML=`<div class="success"><div class="success-mark">✓</div><p>Gracias, ${escapeHtml(state.customer.name.split(' ')[0]||'')}</p><h3>Estamos preparando<br/>tu ONCA favorita.</h3><div class="order-number"><small>NÚMERO DE PEDIDO</small><strong>ONCA-${String(Date.now()).slice(-4)}</strong></div><p>Te avisaremos cuando tu pedido esté listo.</p><button id="finish-order">Volver al menú</button></div>`; action.innerHTML=''; return;
     }
     if(state.cartStep==='checkout'){
       const deliveryFields=state.fulfillment==='delivery'?`<div class="delivery-fields"><label>Dirección<input name="address" value="${escapeHtml(state.customer.address)}" placeholder="Calle, carrera, número y detalles" maxlength="120" required /></label><label>Barrio<input name="neighborhood" value="${escapeHtml(state.customer.neighborhood)}" placeholder="Nombre del barrio" maxlength="60" required /></label></div>`:'';
-      root.innerHTML=`<form class="checkout" id="checkout-form"><fieldset class="checkout-choice"><legend>¿Cómo quieres recibir tu pedido?</legend><div class="choice-grid"><label><input type="radio" name="fulfillment" value="pickup" ${state.fulfillment==='pickup'?'checked':''}/><span><b>⌂</b><strong>Recoger</strong><small>En OKI</small></span></label><label><input type="radio" name="fulfillment" value="delivery" ${state.fulfillment==='delivery'?'checked':''}/><span><b>⌖</b><strong>Domicilio</strong><small>En tu dirección</small></span></label></div></fieldset>${deliveryFields}<label>Nombre completo<input name="name" value="${escapeHtml(state.customer.name)}" placeholder="¿A nombre de quién?" maxlength="60" required /></label><label>Teléfono<input name="phone" type="tel" value="${escapeHtml(state.customer.phone)}" placeholder="300 000 0000" maxlength="20" required /></label><label>Indicaciones especiales <small><span id="note-count">${state.customer.notes.length}</span>/180</small><textarea name="notes" maxlength="180" placeholder="Ej: sin pitillo, alergias o alguna indicación...">${escapeHtml(state.customer.notes)}</textarea></label><fieldset class="checkout-choice payment-choice"><legend>Método de pago</legend><div class="payment-grid">${['Transferencia','Nequi','Bre-B','Efectivo'].map(method=>`<label><input type="radio" name="payment" value="${method}" ${state.payment===method?'checked':''}/><span>${method}</span></label>`).join('')}</div></fieldset><div class="summary"><div class="total"><strong>Total del pedido</strong><strong>${money(total())}</strong></div></div></form>`;
+      root.innerHTML=`<form class="checkout" id="checkout-form"><fieldset class="checkout-choice"><legend>¿Cómo quieres recibir tu pedido?</legend><div class="choice-grid"><label><input type="radio" name="fulfillment" value="pickup" ${state.fulfillment==='pickup'?'checked':''}/><span><b>⌂</b><strong>Recoger</strong><small>En ONCA Açaí</small></span></label><label><input type="radio" name="fulfillment" value="delivery" ${state.fulfillment==='delivery'?'checked':''}/><span><b>⌖</b><strong>Domicilio</strong><small>En tu dirección</small></span></label></div></fieldset>${deliveryFields}<label>Nombre completo<input name="name" value="${escapeHtml(state.customer.name)}" placeholder="¿A nombre de quién?" maxlength="60" required /></label><label>Teléfono<input name="phone" type="tel" value="${escapeHtml(state.customer.phone)}" placeholder="300 000 0000" maxlength="20" required /></label><label>Indicaciones especiales <small><span id="note-count">${state.customer.notes.length}</span>/180</small><textarea name="notes" maxlength="180" placeholder="Ej: sin pitillo, alergias o alguna indicación...">${escapeHtml(state.customer.notes)}</textarea></label><fieldset class="checkout-choice payment-choice"><legend>Método de pago</legend><div class="payment-grid">${['Transferencia','Nequi','Bre-B','Efectivo'].map(method=>`<label><input type="radio" name="payment" value="${method}" ${state.payment===method?'checked':''}/><span>${method}</span></label>`).join('')}</div></fieldset><div class="summary"><div class="total"><strong>Total del pedido</strong><strong>${money(total())}</strong></div></div></form>`;
       action.innerHTML=`<button id="confirm-order">Confirmar pedido · ${money(total())}</button>`; return;
     }
     if(!state.cart.length){ root.innerHTML='<div class="cart-empty"><i><svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"></path></svg></i><h3>Tu pedido está vacío</h3><p>Explora el menú y agrega algo delicioso.</p><button id="explore-menu">Explorar el menú</button></div>'; action.innerHTML=''; return; }
@@ -242,9 +257,9 @@
     }).join('\n\n');
     const delivery=state.fulfillment==='delivery'
       ? `🚚 *Entrega:* Domicilio\n📍 *Dirección:* ${state.customer.address.trim()}\n🏘️ *Barrio:* ${state.customer.neighborhood.trim()}\n🛵 *Domicilio:* El costo depende de la mensajería.`
-      : '🏪 *Entrega:* Recoger en OKI\n📍 Cra 25 # 47 - 31 Recreo';
+      : '🏪 *Entrega:* Recoger en ONCA Açaí\n📍 Cra 25 # 47 - 59 B. El Recreo';
     const notes=state.customer.notes.trim()?`\n\n📝 *Indicaciones*\n${state.customer.notes.trim()}`:'';
-    return `💚 *NUEVO PEDIDO OKI - おき*\n\n👤 *Cliente*\n• Nombre: ${state.customer.name.trim()}\n• Teléfono: ${state.customer.phone.trim()}\n\n🧾 *Detalle del pedido*\n\n${items}\n\n${delivery}\n\n💳 *Método de pago:* ${state.payment}${notes}\n\n💰 *TOTAL: ${money(total())}*\n\n¡Gracias por elegir OKI! 🌿`;
+    return `🫐 *NUEVO PEDIDO ONCA AÇAÍ*\n\n👤 *Cliente*\n• Nombre: ${state.customer.name.trim()}\n• Teléfono: ${state.customer.phone.trim()}\n\n🧾 *Detalle del pedido*\n\n${items}\n\n${delivery}\n\n💳 *Método de pago:* ${state.payment}${notes}\n\n💰 *TOTAL: ${money(total())}*\n\n¡Gracias por elegir ONCA Açaí! 🍃`;
   }
   function confirmOrder(){
     const digits=state.customer.phone.replace(/\D/g,'');
@@ -252,7 +267,7 @@
     if(state.fulfillment==='delivery'&&(!state.customer.address.trim()||!state.customer.neighborhood.trim())){toast('Completa el domicilio','Ingresa la dirección y el barrio.');return;}
     if(!state.payment){toast('Selecciona el pago','Elige un método de pago para continuar.');return;}
     state.orderTotal=total();
-    window.location.href=`https://wa.me/573028496691?text=${encodeURIComponent(buildWhatsAppMessage())}`;
+    window.location.href=`https://wa.me/573014888443?text=${encodeURIComponent(buildWhatsAppMessage())}`;
   }
 
   $('#categories').addEventListener('click',event=>{const button=event.target.closest('[data-category]');if(!button)return;state.category=button.dataset.category;renderCategories();renderProducts();});
@@ -296,8 +311,8 @@
 
   if(document.modelContext?.registerTool){
     const controller=new AbortController();
-    document.modelContext.registerTool({name:'read_oki_menu',title:'Consultar menú de OKI',description:'Devuelve el menú completo disponible con categorías y precios.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute:()=>({products:products.filter(p=>p.price!=null).map(({id,name,category,price})=>({id,name,category,price}))})},{signal:controller.signal});
-    document.modelContext.registerTool({name:'add_oki_product_to_cart',title:'Agregar producto al pedido',description:'Agrega un producto disponible al carrito con sus opciones predeterminadas.',inputSchema:{type:'object',properties:{productId:{type:'string'},quantity:{type:'integer',minimum:1,maximum:20}},required:['productId','quantity'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:({productId,quantity})=>{const p=productById(productId);if(!p||p.price==null||!Number.isInteger(quantity)||quantity<1||quantity>20)throw new Error('Producto o cantidad no válidos.');state.cart.push({key:`${p.id}-${Date.now()}`,productId:p.id,quantity,selections:defaultSelections(p),unitPrice:p.price});saveCart();return{status:'added',product:p.name,quantity};}},{signal:controller.signal});
+    document.modelContext.registerTool({name:'read_onca_menu',title:'Consultar menú de ONCA Açaí',description:'Devuelve el menú completo disponible con tamaños y precios.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute:()=>({products:products.filter(p=>p.price!=null).map(({id,name,category,price})=>({id,name,category,price}))})},{signal:controller.signal});
+    document.modelContext.registerTool({name:'add_onca_product_to_cart',title:'Agregar producto al pedido',description:'Agrega un tamaño disponible al carrito con sus opciones predeterminadas.',inputSchema:{type:'object',properties:{productId:{type:'string'},quantity:{type:'integer',minimum:1,maximum:20}},required:['productId','quantity'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:({productId,quantity})=>{const p=productById(productId);if(!p||p.price==null||!Number.isInteger(quantity)||quantity<1||quantity>20)throw new Error('Producto o cantidad no válidos.');state.cart.push({key:`${p.id}-${Date.now()}`,productId:p.id,quantity,selections:defaultSelections(p),unitPrice:p.price});saveCart();return{status:'added',product:p.name,quantity};}},{signal:controller.signal});
   }
 
   renderCategories();renderProducts(true);updateCounts();setTimeout(()=>renderProducts(),320);

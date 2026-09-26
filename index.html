@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f5f8e7" />
-  <meta name="application-name" content="OKI - おき" />
+  <meta name="theme-color" content="#f8f1e8" />
+  <meta name="application-name" content="ONCA Açaí" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="OKI - おき" />
-  <meta name="description" content="Menú completo y pedidos online de OKI." />
-  <title>OKI — Pedidos online</title>
-  <link rel="icon" href="./public/favicon.svg" />
-  <link rel="apple-touch-icon" href="./images/oki-app-icon-192.png" />
+  <meta name="apple-mobile-web-app-title" content="ONCA Açaí" />
+  <meta name="description" content="Açaí y yogurt BAR · Sugar free · Pedidos online de ONCA Açaí." />
+  <title>ONCA Açaí — Pedidos online</title>
+  <link rel="icon" type="image/png" href="./images/onca-app-icon-192.png" />
+  <link rel="apple-touch-icon" href="./images/onca-app-icon-192.png" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
@@ -19,23 +19,23 @@
   <main>
     <header class="site-header">
       <div class="header-row">
-        <a class="brand" href="#menu" aria-label="OKI, ir al menú"><span>おき</span>OKI</a>
-        <p class="slogan">TU PAUSA FAVORITA</p>
+        <a class="brand" href="#menu" aria-label="ONCA Açaí, ir al menú"><img src="./images/onca-logo.png" alt="ONCA Açaí" /></a>
+        <p class="slogan">LA NATURALEZA DE VOLVER A TI</p>
         <button class="icon-button" id="header-cart" aria-label="Abrir carrito"><svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"></path></svg><b class="cart-count">0</b></button>
       </div>
-      <button class="location-card" type="button"><span class="location-icon">⌖</span><span><small>Tu pedido en</small><strong id="order-location">OKI · Recoger en tienda</strong></span><i>⌄</i></button>
-      <aside class="store-info" aria-label="Información de OKI">
-        <div class="store-about"><span>Matcha Bar &amp; Brunch</span><strong>Tu nueva pausa favorita 💚</strong></div>
-        <div class="store-details"><span>🕘 9am - 12pm / 2pm - 8pm</span><span>📍 Cra 25 # 47 - 31 Recreo</span></div>
+      <button class="location-card" type="button"><span class="location-icon">⌖</span><span><small>Tu pedido en</small><strong id="order-location">ONCA Açaí · Recoger en tienda</strong></span><i>⌄</i></button>
+      <aside class="store-info" aria-label="Información de ONCA Açaí">
+        <div class="store-about"><span>Açaí y yogurt BAR 🫐✨🐆</span><strong>Sugar free</strong></div>
+        <div class="store-details"><span>🍃 La naturaleza de volver a ti</span><span>📍 Cra 25 # 47 - 59 B. El Recreo</span></div>
       </aside>
     </header>
 
     <section class="hero-wrap">
       <div class="hero">
-        <div class="hero-copy"><small>ALL DAY, OKI</small><h1>Tu pausa<br />favorita.</h1><a href="#menu">Ver el menú <span>→</span></a></div>
-        <div class="hero-visual" aria-label="Smoothies OKI">
+        <div class="hero-copy"><small>SUGAR FREE</small><h1>Arma tu<br />ONCA.</h1><a href="#menu">Ver el menú <span>→</span></a></div>
+        <div class="hero-visual" aria-label="Selección de bebidas">
           <img class="hero-smoothie" src="./images/smoothie-mornings.png" alt="Smoothie Mornings de maracuyá y mango" fetchpriority="high" />
-          <img class="hero-smoothie" src="./images/smoothie-oki.png" alt="Smoothie Oki de matcha, banano y aguacate" />
+          <img class="hero-smoothie" src="./images/smoothie-oki.png" alt="Bebida cremosa con matcha, banano y aguacate" />
           <img class="hero-smoothie" src="./images/smoothie-berries-transparent.png" alt="Smoothie Berries lover de frutos rojos" />
           <img class="hero-smoothie" src="./images/smoothie-choco-transparent.png" alt="Smoothie Choco banana con cacao" />
         </div>
@@ -44,7 +44,7 @@
     </section>
 
     <section class="menu" id="menu">
-      <div class="section-head"><div><small>MENÚ COMPLETO</small><h2>Elige tu favorito</h2></div><span class="open"><i></i>Abierto hoy</span></div>
+      <div class="section-head"><div><small>ARMA TU ONCA</small><h2>Elige tu tamaño</h2></div><span class="open"><i></i>Abierto hoy</span></div>
       <div class="categories" id="categories" role="tablist" aria-label="Categorías del menú"></div>
       <div class="product-grid" id="products" aria-live="polite"></div>
     </section>
@@ -78,7 +78,7 @@
     <section class="welcome-dialog" role="dialog" aria-modal="true" aria-labelledby="welcome-title" aria-describedby="welcome-copy">
       <button class="welcome-dismiss" id="welcome-dismiss" type="button" aria-label="Cerrar">×</button>
       <div class="welcome-mark" aria-hidden="true">💚</div>
-      <small>BIENVENIDO A OKI</small>
+      <small>BIENVENIDO A ONCA AÇAÍ</small>
       <h2 id="welcome-title">Arma tu orden</h2>
       <p id="welcome-copy">Te llevaremos a WhatsApp automáticamente cuando confirmes el pedido. El costo del domicilio dependerá de la mensajería.</p>
       <button class="welcome-action" id="welcome-close" type="button">Comenzar pedido <span aria-hidden="true">→</span></button>

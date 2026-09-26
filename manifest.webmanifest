@@ -1,22 +1,22 @@
 {
-  "name": "OKI - おき",
-  "short_name": "OKI - おき",
-  "description": "Matcha Bar & Brunch. Tu nueva pausa favorita.",
+  "name": "ONCA Açaí",
+  "short_name": "ONCA Açaí",
+  "description": "Açaí y yogurt BAR · Sugar free · La naturaleza de volver a ti.",
   "lang": "es-CO",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f5f8e7",
-  "theme_color": "#073f2b",
+  "background_color": "#f8f1e8",
+  "theme_color": "#8b145e",
   "icons": [
     {
-      "src": "./images/oki-app-icon-192.png",
+      "src": "./images/onca-app-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./images/oki-app-icon-512.png",
+      "src": "./images/onca-app-icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
